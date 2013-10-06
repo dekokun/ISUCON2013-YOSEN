@@ -42,9 +42,9 @@ function get($key) {
 }
 
 function before($route) {
-    /* layout('layout.html.php'); */
-    /* set('greeting', 'Hello'); */
-    /* set('site_name', 'Isucon'); */
+    layout('layout.html.php');
+    set('greeting', 'Hello');
+    set('site_name', 'Isucon');
 
     $path = $_SERVER['QUERY_STRING'];
     $method = $route['method'];
