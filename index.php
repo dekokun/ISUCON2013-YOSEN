@@ -13,7 +13,7 @@ function configure()
     $env = getenv('ISUCON_ENV');
     if (!$env) $env = 'local';
 
-    $file = realpath(__DIR__ . '/../config/' . $env . '.json');
+    $file = realpath(__DIR__ . '/./config/' . $env . '.json');
     $fh = fopen($file, 'r');
     $config = json_decode(fread($fh, filesize($file)), true);
     fclose($fh);
@@ -326,10 +326,6 @@ function __xhprof_save() {
 echo "<a href=\"http://ec2-176-32-67-9.ap-northeast-1.compute.amazonaws.com:5000/xhprof_html/index.php?run=$run_id&source=isucon_app\">xhprof Result</a>\n";
 }
 
-//dispatch('/xhprof_html/index.php', function() {
-//    require(dirname(__FILE__) . '/xhprof_html/index.php');
-//});
- 
 xhprof_enable();
 register_shutdown_function('__xhprof_save');
 
