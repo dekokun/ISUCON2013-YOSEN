@@ -10,21 +10,12 @@ function configure()
     option('base_uri', '');
     option('session', 'isucon_session');
  
-    $env = getenv('ISUCON_ENV');
-    if (!$env) $env = 'local';
-
-    $file = realpath(__DIR__ . '/./config/' . $env . '.json');
-    $fh = fopen($file, 'r');
-    $config = json_decode(fread($fh, filesize($file)), true);
-    fclose($fh);
-
     $db = null;
     try {
         $db = new PDO(
-            'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname']
-,
-            $config['database']['username'],
-            $config['database']['password'],
+            'mysql:host=localhost;dbname=isucon',
+            "isucon",
+            "",
             array(
                 PDO::ATTR_PERSISTENT => true,
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET CHARACTER SET `utf8`',
