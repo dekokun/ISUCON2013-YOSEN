@@ -115,7 +115,7 @@ function markdown($content) {
 dispatch_get('/', function() {
     $db = option('db_conn');
 
-    $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0');
+    $stmt = $db->prepare('SELECT count AS total FROM count_memos where id = 123');
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total = $result["total"];
@@ -135,7 +135,8 @@ dispatch_get('/recent/:page', function(){
     $db = option('db_conn');
 
     $page = params('page');
-    $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0');
+    $stmt = $db->prepare('SELECT count AS total FROM count_memos where id = 123');
+    /* $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0'); */
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total = $result["total"];
@@ -221,8 +222,11 @@ dispatch_post('/memo', function() {
     $stmt->bindValue(':html_content', $html_content);
     $stmt->bindValue(':is_private', $is_private);
     $stmt->execute();
-
     $memo_id = $db->lastInsertId();
+
+    $stmt = $db->prepare('update count_memos set count = count + 1 where id = 123');
+    $stmt->execute();    
+
     return redirect('/memo/' . $memo_id);
 });
 
