@@ -253,7 +253,7 @@ dispatch_get('/memo/:id', function() {
     $db = option('db_conn');
 
     $user = get('user');
-    $stmt = $db->prepare('SELECT id, user, content, is_private, created_at, updated_at FROM memos WHERE id = :id');
+    $stmt = $db->prepare('SELECT id, user, content, is_private, content, created_at, updated_at FROM memos WHERE id = :id');
     $stmt->bindValue(':id', params('id'));
     $stmt->execute();
     $memo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -269,6 +269,7 @@ dispatch_get('/memo/:id', function() {
     }
 
     $memo['content_html'] = markdown($memo['content']);
+    /* $memo['content_html'] = $memo['content']; */
     
     $stmt = $db->prepare('SELECT username FROM users WHERE id = :id');
     $stmt->bindValue(':id', $memo['user']);
@@ -310,6 +311,25 @@ dispatch_get('/memo/:id', function() {
 
     return html('memo.html.php');
 });
+
+
+
+function __xhprof_save() {
+    $data = xhprof_disable();
+    $XHPROF_ROOT = realpath(dirname(__FILE__) );
+    require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
+    require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+    $runs = new XHProfRuns_Default();
+    $run_id = $runs->save_run($data, 'isucon_app');
+echo "<a href=\"/xhprof_html/index.php\">to xhprof</a>";
+}
+
+dispatch('/xhprof_html/index.php', function() {
+    require(dirname(__FILE__) . '/xhprof_html/index.php');
+});
+ 
+xhprof_enable();
+register_shutdown_function('__xhprof_save');
 
 
 run();

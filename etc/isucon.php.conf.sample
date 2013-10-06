@@ -1,4 +1,4 @@
-#Listen 0.0.0.0:5000
+Listen 0.0.0.0:5000
 
 <Directory /home/isucon/webapp/php>
     Options FollowSymLinks
@@ -6,7 +6,7 @@
     Require all granted
 </Directory>
 
-<VirtualHost ec2-176-32-67-9.ap-northeast-1.compute.amazonaws.com:80>
+<VirtualHost 0.0.0.0:5000>
     ServerName localhost
     DocumentRoot /home/isucon/webapp/php
     DirectoryIndex index.php
