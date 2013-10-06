@@ -17,7 +17,7 @@ function configure()
             "isucon",
             "",
             array(
-                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_PERSISTENT => false,
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET CHARACTER SET `utf8`',
             )
         );
