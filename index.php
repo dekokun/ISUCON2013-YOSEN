@@ -166,7 +166,7 @@ dispatch_get('/signin', function() {
 });
 
 dispatch_post('/signout', function() {
-    if (isset($_SESSION)) {
+    if (!isset($_SESSION)) {
         session_start();
     }
     session_regenerate_id(TRUE);
