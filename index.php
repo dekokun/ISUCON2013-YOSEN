@@ -115,11 +115,12 @@ function markdown($content) {
 dispatch_get('/', function() {
     $db = option('db_conn');
 
-    /* $stmt = $db->prepare('SELECT count AS total FROM count_memos where id = 123'); */
-    $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0');
+    $stmt = $db->prepare('SELECT count AS total FROM count_memos where id = 123');
+    /* $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0'); */
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total = $result["total"];
+    echo $total;
 
     $stmt = $db->prepare('SELECT memos.id, title, username, created_at FROM memos inner join users on memos.user = users.id WHERE is_private=0 ORDER BY created_at DESC LIMIT 100');
     $stmt->execute();
@@ -136,8 +137,8 @@ dispatch_get('/recent/:page', function(){
     $db = option('db_conn');
 
     $page = params('page');
-    /* $stmt = $db->prepare('SELECT count AS total FROM count_memos where id = 123'); */
-    $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0');
+    $stmt = $db->prepare('SELECT count AS total FROM count_memos where id = 123');
+    /* $stmt = $db->prepare('SELECT count(*) AS total FROM memos WHERE is_private=0'); */
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total = $result["total"];
@@ -225,9 +226,11 @@ dispatch_post('/memo', function() {
     $stmt->execute();
 
     $memo_id = $db->lastInsertId();
-
-    $stmt = $db->prepare('update count_memos set count = count + 1 where id = 123');
-    $stmt->execute();    
+    
+    if ($is_private == 0) {
+      $stmt = $db->prepare('update count_memos set count = count + 1 where id = 123');
+      $stmt->execute();    
+    }
 
     return redirect('/memo/' . $memo_id);
 });
