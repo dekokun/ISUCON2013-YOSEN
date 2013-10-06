@@ -11,8 +11,7 @@
 <ul>
 <?php foreach($memos as $memo) { ?>
 <li>
-<?php $fragments = preg_split("/\r?\n/", $memo["content"]); ?>
-  <a href="<?php echo uri_for('/memo/') ?><?php echo $memo["id"] ?>"><?php echo $fragments[0] ?></a> <?php echo $memo["created_at"] ?>
+  <a href="<?php echo uri_for('/memo/') ?><?php echo $memo["id"] ?>"><?php echo $memo["title"] ?></a> <?php echo $memo["created_at"] ?>
 <?php   if ($memo["is_private"]) { ?>
  [private]
 <?php   } ?>
