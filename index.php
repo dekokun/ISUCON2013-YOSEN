@@ -13,7 +13,7 @@ function configure()
     $db = null;
     try {
         $db = new PDO(
-            'mysql:host=localhost;dbname=isucon',
+            'mysql:unix_socket=/var/lib/mysql/mysql.sock;dbname=isucon',
             "isucon",
             "",
             array(
