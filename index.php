@@ -295,19 +295,19 @@ dispatch_get('/memo/:id', function() {
 });
 
 
-
-function __xhprof_save() {
-    $data = xhprof_disable();
-    $XHPROF_ROOT = realpath(dirname(__FILE__) );
-    require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
-    require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
-    $runs = new XHProfRuns_Default('/tmp/xhprof');
-    $run_id = $runs->save_run($data, 'isucon_app');
-echo "<a href=\"http://ec2-176-32-67-9.ap-northeast-1.compute.amazonaws.com:5000/xhprof_html/index.php?run=$run_id&source=isucon_app\">xhprof Result</a>\n";
-}
-
-xhprof_enable();
-register_shutdown_function('__xhprof_save');
+# 
+# function __xhprof_save() {
+#     $data = xhprof_disable();
+#     $XHPROF_ROOT = realpath(dirname(__FILE__) );
+#     require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
+#     require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+#     $runs = new XHProfRuns_Default('/tmp/xhprof');
+#     $run_id = $runs->save_run($data, 'isucon_app');
+# echo "<a href=\"http://ec2-176-32-67-9.ap-northeast-1.compute.amazonaws.com:5000/xhprof_html/index.php?run=$run_id&source=isucon_app\">xhprof Result</a>\n";
+# }
+# 
+# xhprof_enable();
+# register_shutdown_function('__xhprof_save');
 
 
 run();
