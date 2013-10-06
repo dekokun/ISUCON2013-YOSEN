@@ -237,11 +237,13 @@ dispatch_post('/memo', function() {
 
     $user = get('user');
     $content = $_POST["content"];
+    $html_content = markdown($_POST["content"]);
     $is_private = $_POST["is_private"] != 0 ? 1 : 0;
 
-    $stmt = $db->prepare('INSERT INTO memos (user, content, is_private, created_at) VALUES (:user, :content, :is_private, now())');
+    $stmt = $db->prepare('INSERT INTO memos (user, content, html_content, is_private, created_at) VALUES (:user, :content, :html_content, :is_private, now())');
     $stmt->bindValue(':user', $user['id']);
     $stmt->bindValue(':content', $content);
+    $stmt->bindValue(':html_content', $html_content);
     $stmt->bindValue(':is_private', $is_private);
     $stmt->execute();
 
@@ -253,7 +255,7 @@ dispatch_get('/memo/:id', function() {
     $db = option('db_conn');
 
     $user = get('user');
-    $stmt = $db->prepare('SELECT id, user, content, is_private, content, created_at, updated_at FROM memos WHERE id = :id');
+    $stmt = $db->prepare('SELECT id, user, html_content, is_private, content, created_at, updated_at FROM memos WHERE id = :id');
     $stmt->bindValue(':id', params('id'));
     $stmt->execute();
     $memo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -268,7 +270,7 @@ dispatch_get('/memo/:id', function() {
         }
     }
 
-    $memo['content_html'] = markdown($memo['content']);
+    /* $memo['content_html'] = markdown($memo['content']); */
     /* $memo['content_html'] = $memo['content']; */
     
     $stmt = $db->prepare('SELECT username FROM users WHERE id = :id');
@@ -319,14 +321,14 @@ function __xhprof_save() {
     $XHPROF_ROOT = realpath(dirname(__FILE__) );
     require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
     require_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
-    $runs = new XHProfRuns_Default();
+    $runs = new XHProfRuns_Default('/tmp/xhprof');
     $run_id = $runs->save_run($data, 'isucon_app');
-echo "<a href=\"/xhprof_html/index.php\">to xhprof</a>";
+echo "<a href=\"http://ec2-176-32-67-9.ap-northeast-1.compute.amazonaws.com:5000/xhprof_html/index.php?run=$run_id&source=isucon_app\">xhprof Result</a>\n";
 }
 
-dispatch('/xhprof_html/index.php', function() {
-    require(dirname(__FILE__) . '/xhprof_html/index.php');
-});
+//dispatch('/xhprof_html/index.php', function() {
+//    require(dirname(__FILE__) . '/xhprof_html/index.php');
+//});
  
 xhprof_enable();
 register_shutdown_function('__xhprof_save');
