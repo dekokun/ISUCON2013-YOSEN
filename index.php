@@ -42,9 +42,9 @@ function get($key) {
 }
 
 function before($route) {
-    layout('layout.html.php');
-    set('greeting', 'Hello');
-    set('site_name', 'Isucon');
+    /* layout('layout.html.php'); */
+    /* set('greeting', 'Hello'); */
+    /* set('site_name', 'Isucon'); */
 
     $path = $_SERVER['QUERY_STRING'];
     $method = $route['method'];
@@ -212,8 +212,7 @@ dispatch_post('/memo', function() {
 
     $user = get('user');
     $content = $_POST["content"];
-    $tmp = $content;
-    $fragment = preg_split("/\r?\n/", $tmp);
+    $fragment = preg_split("/\r?\n/", $content);
     $title = $fragment[0];
     $html_content = markdown($_POST["content"]);
     $is_private = $_POST["is_private"] != 0 ? 1 : 0;
@@ -249,9 +248,6 @@ dispatch_get('/memo/:id', function() {
         }
     }
 
-    /* $memo['content_html'] = markdown($memo['content']); */
-    /* $memo['content_html'] = $memo['content']; */
-    
     $stmt = $db->prepare('SELECT username FROM users WHERE id = :id');
     $stmt->bindValue(':id', $memo['user']);
     $stmt->execute();
@@ -266,7 +262,7 @@ dispatch_get('/memo/:id', function() {
         $cond = "AND is_private=0";
     }
 
-    $stmt = $db->prepare("SELECT * FROM memos WHERE user = :user " . $cond . " ORDER BY created_at");
+    $stmt = $db->prepare("SELECT id, is_private, created_at FROM memos WHERE user = :user " . $cond . " ORDER BY created_at");
     $stmt->bindValue(':user', $memo['user']);
     $stmt->execute();
     $memos = $stmt->fetchAll(PDO::FETCH_ASSOC);
